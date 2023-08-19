@@ -8,7 +8,7 @@
 }
 
 .title{
-    font-size: 85px;
+    font-size: 75px;
     color: #fff;
     animation:flipTitle 2s ;
 }
@@ -71,7 +71,7 @@
 
 .main h2{
     margin: 16px 0;
-    font-size: 39px;
+    font-size: 35px;
 }
 
 .main span{
