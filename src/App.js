@@ -1,65 +1,69 @@
-import {BsSearch} from 'react-icons/bs';
+import React, { useState } from 'react';
+import { BsSearch } from 'react-icons/bs';
 import './style.css';
-import { useState } from 'react';
-import {FiMapPin} from 'react-icons/fi';
+import { FiMapPin } from 'react-icons/fi';
 
 import api from './services/api';
 
 function App() {
-
   const [input, setInput] = useState('');
   const [cep, setCep] = useState({});
 
-  async function handlesearch(){
-    if(input === ''){
-      alert("Preencha algum cep")
+  async function handlesearch() {
+    if (input === '') {
+      alert('Preencha algum cep');
       return;
     }
 
-    try{
+    try {
       const response = await api.get(`${input}/json`);
-      setCep(response.data)
-      setInput("");
-      
-    }catch{
-      alert("Erro ao buscar cep");
-      setInput("")
+      setCep(response.data);
+      setInput('');
+    } catch {
+      alert('Erro ao buscar cep');
+      setInput('');
+    }
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      handlesearch();
     }
   }
 
   return (
     <div className="container">
-     <h1 className="title">Buscador Cep<FiMapPin color='rgb(188, 0, 8)' style={{transform: 'rotate(40deg)'}}/></h1>
-     
-
+      <h1 className="title">
+        Buscador Cep
+        <FiMapPin color="rgb(188, 0, 8)" style={{ transform: 'rotate(40deg)' }} />
+      </h1>
 
       <div className="container-input">
-         <input
-         type="text"
-         placeholder="Digite seu CEP..."
-         value={input}
-         onChange={(e) => setInput(e.target.value)}/>
+        <input
+          type="search"
+          placeholder="Digite seu CEP..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress} // Adiciona o evento onKeyPress
+          required
+        />
 
-         <button className="button-search" onClick={handlesearch}>
-            <BsSearch size={25} color='white'/>
-         </button>
+        <button className="button-search" onClick={handlesearch}>
+          <BsSearch size={25} color="white" />
+        </button>
       </div>
 
       {Object.keys(cep).length > 0 && (
-          <main className='main'>
+        <main className="main">
           <h2>CEP: {cep.cep}</h2>
-  
+
           <span>{cep.logradouro}</span>
-          {Object.keys(cep.complemento).length > 0 && (
-              <span>Complemento: {cep.complemento}</span>
-          )}
-          <span>{cep.bairro}</span>
-          <span>{cep.localidade} - {cep.uf}</span>
+          {Object.keys(cep.complemento).length > 0 && <span>Complemento: {cep.complemento}</span>}
+          <span>
+            {cep.localidade} - {cep.uf}
+          </span>
         </main>
-      )} 
-
-      
-
+      )}
     </div>
   );
 }
